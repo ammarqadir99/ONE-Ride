@@ -32,7 +32,7 @@ export default function LoginPage() {
           <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mb-4">
             <Car className="w-9 h-9 text-white" />
           </div>
-          <h1 className="text-3xl font-bold tracking-tight">MAS Ride</h1>
+          <h1 className="text-3xl font-bold tracking-tight">ONE Ride</h1>
           <p className="text-white/75 text-sm mt-1">Your daily carpool companion</p>
         </div>
 

@@ -27,7 +27,7 @@ export default function CarpoolPage() {
     <PhoneFrame>
       <div className="flex flex-col h-full bg-gray-50">
         <div className="flex-shrink-0 bg-white px-5 pt-12 pb-4 shadow-sm">
-          <h1 className="text-xl font-bold text-foreground mb-4">MAS Carpool</h1>
+          <h1 className="text-xl font-bold text-foreground mb-4">ONE Carpool</h1>
           <div className="flex items-center gap-2 bg-muted rounded-2xl px-4 py-2.5">
             <Search className="w-4 h-4 text-muted-foreground flex-shrink-0" />
             <input

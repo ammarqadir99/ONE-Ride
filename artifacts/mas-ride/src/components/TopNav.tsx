@@ -17,7 +17,7 @@ export function TopNav() {
         </SheetContent>
       </Sheet>
 
-      <div className="font-bold text-2xl tracking-tight text-primary">MAS</div>
+      <div className="font-bold text-2xl tracking-tight text-primary">ONE</div>
 
       <Link href="/notifications" className="p-2 -mr-2 relative text-foreground">
         <Bell className="w-6 h-6" />

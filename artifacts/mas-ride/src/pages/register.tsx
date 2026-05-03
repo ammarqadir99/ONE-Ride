@@ -34,7 +34,7 @@ export default function RegisterPage() {
             <span className="text-sm">Back</span>
           </Link>
           <h1 className="text-3xl font-bold text-white">Create Account</h1>
-          <p className="text-white/75 text-sm mt-1">Join MAS Ride community</p>
+          <p className="text-white/75 text-sm mt-1">Join ONE Ride community</p>
         </div>
 
         <div className="flex-1 px-6 pt-10 pb-6">

@@ -193,7 +193,7 @@ export default function CarpoolDetailPage() {
                 "Check reviews and ratings carefully",
                 "Practice caution when meeting strangers",
                 "Payments — pay only through platform",
-                "MAS Ride is not liable for disputes",
+                "ONE Ride is not liable for disputes",
               ].map((tip) => (
                 <li key={tip} className="flex items-start gap-2">
                   <AlertTriangle className="w-3 h-3 mt-0.5 flex-shrink-0" />

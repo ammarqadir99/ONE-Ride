@@ -129,8 +129,8 @@ export default function HomePage() {
               <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-4">
                 <Car className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="font-bold text-lg text-foreground">MAS Ride</h3>
-              <p className="text-muted-foreground text-sm text-center mt-2 max-w-[220px]">On-demand rides coming soon! Switch to MAS Carpool to find daily routes.</p>
+              <h3 className="font-bold text-lg text-foreground">ONE Ride</h3>
+              <p className="text-muted-foreground text-sm text-center mt-2 max-w-[220px]">On-demand rides coming soon! Switch to ONE Carpool to find daily routes.</p>
             </div>
           )}
         </div>
