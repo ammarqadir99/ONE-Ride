@@ -1,0 +1,234 @@
+Build a full-stack Carpool & Ride-Sharing mobile-first web application 
+for Pakistan using Next.js 14 (App Router) + Tailwind CSS + shadcn/ui.
+
+The app is called "MAS Ride" with brand color: Purple (#7C3AED).
+
+---
+
+## CORE USER ROLES
+1. Passenger — searches and joins carpool rides
+2. Driver (Carpool Driver) — publishes and manages their carpool routes
+3. Admin — manages users, rides, disputes (separate dashboard)
+
+---
+
+## AUTHENTICATION FLOW (screens in order)
+1. Sign In screen — phone number input (+92 prefix) + Login button + 
+   "Don't have an account? Register" link
+2. Registration screen — phone number input + Sign Up button
+3. OTP Verification screen — 6-box OTP input, 60s countdown timer, 
+   "Resend Code" link, "Change Number" option, Verify button
+4. Profile Setup — 3-step wizard with progress indicator:
+   Step 1 "Informations": First name, Last name, Gender (dropdown), 
+   Email, Date of Birth
+   Step 2 "Address": Select City (dropdown), Select State (dropdown), 
+   Country (default Pakistan)
+   Step 3 "Profile": Avatar upload (camera icon), Done button + Skip option
+
+---
+
+## HOME SCREEN (after login)
+- Top navbar: hamburger menu (left), "MAS" title (center), 
+  notification bell (right)
+- Tab bar: "MAS Ride" | "MAS Carpool" (purple underline on active)
+- MAS Carpool tab shows vehicle type selector grid:
+  Car, Bike, Van, Rickshaw (with emoji/icon, purple tile background)
+- "Rides Update" horizontal scroll section with info cards
+- "Safety Tips" horizontal scroll section
+- Bottom nav: Home, Chat, Activity, Profile
+
+---
+
+## SIDE DRAWER MENU
+Slide-out from left, purple background (#7C3AED), white text:
+- User avatar + name at top
+- Menu items with icons:
+  How to use app | My Profile | My Wallet | Customer Support |
+  Search Carpool Ride | Become a Carpool Driver | 
+  Publish Carpool Ride | Bank Account | Referral System | 
+  Notification | Settings | Logout
+- App version shown at bottom
+
+---
+
+## MAS CARPOOL — RIDE LISTING SCREEN
+- Search bar at top
+- Ride cards showing:
+  - Driver avatar (initials fallback) + name + star rating
+  - Time, Available Seats, Seat Price (PKR/day)
+  - Status badge: "PASSENGER" (gray) or "DRIVING" (green)
+  - Route: Origin → (Stop count) → Destination with dashed line
+  - Route comments/details text
+- Floating action button: search/filter icon (bottom right)
+- Bottom nav: Search | Publish | My Rides | Chat | Profile
+
+---
+
+## RIDE DETAILS SCREEN
+- Back arrow + "Ride Details" title
+- Driver card: avatar, name, rating, time
+- "Trip Details" card:
+  - Origin with pin icon
+  - Dashed line connector
+  - Destination with pin icon
+- Route comments box
+- Embedded Google Map view (static map or interactive)
+- Detail rows (card style, each in its own rounded box):
+  Ride ID | Required Seats | Time | Per Seat Price (PKR/Day) | 
+  Days (M,T,W,T,F,S,S)
+- "Return Ride" section:
+  Return per Seat Price | Available Seats | Time | Return Days
+- Action buttons row: [Join Ride] [📞 Call] [Message]
+- Safety notice card (yellow/amber background):
+  "Your Safety Matters To Us!" with bullet points:
+  • Verify Information
+  • Communicate Directly  
+  • Check Reviews and Ratings
+  • Practice Caution
+  • Payments & Security (pay only through platform)
+  • Disclaimer
+
+---
+
+## MY PROFILE SCREEN
+- Large circular avatar with purple border
+- Name displayed below
+- Stats row: Rating | Total Rides | Total Posts
+- Menu items (rounded card style):
+  Personal Info | My Wallet | Address | My Rating | Delete Account
+
+---
+
+## PUBLISH CARPOOL RIDE FLOW
+Form with fields:
+- Vehicle Type (Car/Bike/Van/Rickshaw)
+- Origin location (Google Places autocomplete)
+- Destination location (Google Places autocomplete)  
+- Optional stops
+- Departure time picker
+- Days of week selector (M T W T F S S toggles)
+- Available seats (1-4)
+- Per seat price (PKR)
+- Route comments/details textarea
+- Return ride toggle (shows: return time, return price, return days)
+- Publish button
+
+---
+
+## SEARCH CARPOOL SCREEN
+- From location input
+- To location input
+- Date picker
+- Passenger count
+- Search button
+- Results list (same card design as ride listing)
+- Filter options: vehicle type, price range, time
+
+---
+
+## MY RIDES SCREEN
+Tabs: Active Rides | History
+Each ride card shows status: Pending / Confirmed / Completed / Cancelled
+Ride details + action buttons based on role (driver vs passenger)
+
+---
+
+## CHAT SCREEN
+- Conversation list (WhatsApp-style)
+- Individual chat: text messages + ability to share location
+- In-app calling option
+
+---
+
+## MY WALLET SCREEN
+- Balance display (PKR)
+- Add Money button
+- Transaction history list
+- Bank account linking section
+
+---
+
+## BECOME A CARPOOL DRIVER FLOW
+- CNIC upload (front + back)
+- License upload
+- Vehicle details: make, model, year, color, plate number
+- Vehicle photo upload
+- Verification pending state
+
+---
+
+## REFERRAL SYSTEM SCREEN
+- Unique referral code display (copy button)
+- Share button
+- Referral rewards info
+- List of referred users
+
+---
+
+## NOTIFICATIONS SCREEN
+- List of notifications with timestamps
+- Read/unread states
+
+---
+
+## DATA MODEL (use mock data + localStorage for prototype)
+
+User: { id, name, phone, email, gender, dob, city, state, avatar, 
+        rating, totalRides, totalPosts, wallet, role, isDriver }
+
+Ride: { id, driverId, vehicleType, origin, destination, stops, 
+        departureTime, days, availableSeats, pricePerSeat, 
+        routeComments, hasReturn, returnTime, returnPrice, 
+        returnDays, status, passengers[] }
+
+Booking: { id, rideId, passengerId, seats, status, totalPrice, 
+           createdAt }
+
+Message: { id, conversationId, senderId, text, timestamp }
+
+---
+
+## TECH STACK
+- Next.js 14 (App Router)
+- Tailwind CSS
+- shadcn/ui components
+- React Hook Form + Zod for validation
+- Zustand for state management
+- Google Maps API (or Leaflet as free alternative)
+- Lucide React for icons
+- date-fns for date handling
+- Mock data with JSON (no backend needed for prototype)
+
+---
+
+## DESIGN SYSTEM
+Primary: #7C3AED (Purple)
+Primary Light: #EDE9FE
+Secondary: #F59E0B (Amber — for safety notices)
+Success: #10B981 (Green — driving status)
+Background: #FFFFFF
+Text: #111827
+Muted: #6B7280
+Border radius: 24px for buttons, 16px for cards
+Font: Outfit (Google Fonts)
+
+---
+
+## RESPONSIVE
+- Mobile-first: max-width 390px centered on desktop
+- Looks like a native mobile app (no sidebar on mobile)
+- Desktop shows phone-frame wrapper with the app inside
+
+---
+
+## START WITH THESE PAGES IN ORDER:
+1. /login
+2. /register  
+3. /verify-otp
+4. /register/profile (3-step wizard)
+5. /home (carpool tab active)
+6. /carpool (ride listing)
+7. /carpool/[id] (ride details)
+8. /publish
+9. /profile
+10. /chat
