@@ -171,11 +171,9 @@ export default function RegisterProfilePage() {
                     <FormMessage />
                   </FormItem>
                 )} />
-                <div className="pt-2">
-                  <FormItem>
-                    <FormLabel className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Country</FormLabel>
-                    <Input value="Pakistan" disabled className="h-11 rounded-xl bg-muted text-muted-foreground" />
-                  </FormItem>
+                <div className="pt-2 space-y-1.5">
+                  <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Country</label>
+                  <Input value="Pakistan" disabled className="h-11 rounded-xl bg-muted text-muted-foreground" />
                 </div>
                 <Button type="submit" className="w-full h-12 rounded-2xl mt-4 font-semibold" data-testid="button-next-step2">Next</Button>
                 <button type="button" onClick={() => setStep(1)} className="w-full text-sm text-muted-foreground text-center mt-1">Back</button>
