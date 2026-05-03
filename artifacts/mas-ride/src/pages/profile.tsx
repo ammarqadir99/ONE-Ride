@@ -11,11 +11,11 @@ export default function ProfilePage() {
   const logout = useStore((s) => s.logout);
 
   const menuItems = [
-    { icon: User, label: "Personal Info", href: "/profile/edit", danger: false },
-    { icon: Wallet, label: "My Wallet", href: "/wallet", danger: false },
-    { icon: MapPin, label: "Address", href: "/profile/address", danger: false },
-    { icon: ThumbsUp, label: "My Rating", href: "/profile/rating", danger: false },
-    { icon: Trash2, label: "Delete Account", href: "/profile/delete", danger: true },
+    { icon: User,    label: "Personal Info", href: "/profile/edit",    danger: false },
+    { icon: Wallet,  label: "My Wallet",     href: "/wallet",           danger: false },
+    { icon: MapPin,  label: "Address",       href: "/profile/address",  danger: false },
+    { icon: ThumbsUp,label: "My Rating",     href: "/profile/rating",   danger: false },
+    { icon: Trash2,  label: "Delete Account",href: "/profile/delete",   danger: true  },
   ];
 
   const handleLogout = () => {
@@ -43,16 +43,16 @@ export default function ProfilePage() {
             <div className="flex-1 py-3 flex flex-col items-center">
               <div className="flex items-center gap-1">
                 <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                <span className="text-white font-bold text-sm">{currentUser?.rating || "5.0"}</span>
+                <span className="text-white font-bold text-sm">{currentUser?.rating ?? "5.0"}</span>
               </div>
               <p className="text-white/70 text-[10px] mt-0.5">Rating</p>
             </div>
             <div className="flex-1 py-3 flex flex-col items-center">
-              <span className="text-white font-bold text-sm">{currentUser?.totalRides || 0}</span>
+              <span className="text-white font-bold text-sm">{currentUser?.totalRides ?? 0}</span>
               <p className="text-white/70 text-[10px] mt-0.5">Total Rides</p>
             </div>
             <div className="flex-1 py-3 flex flex-col items-center">
-              <span className="text-white font-bold text-sm">{currentUser?.totalPosts || 0}</span>
+              <span className="text-white font-bold text-sm">{currentUser?.totalPosts ?? 0}</span>
               <p className="text-white/70 text-[10px] mt-0.5">Total Posts</p>
             </div>
           </div>
@@ -62,6 +62,7 @@ export default function ProfilePage() {
           {menuItems.map((item) => (
             <button
               key={item.label}
+              onClick={() => setLocation(item.href)}
               data-testid={`profile-menu-${item.label.toLowerCase().replace(/\s/g, "-")}`}
               className="w-full bg-white rounded-2xl px-4 py-3.5 flex items-center gap-4 shadow-sm border border-border active:scale-[0.99] transition-transform"
             >

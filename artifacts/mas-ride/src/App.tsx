@@ -15,6 +15,9 @@ import ProfilePage from "@/pages/profile";
 import ChatPage from "@/pages/chat";
 import MyRidesPage from "@/pages/my-rides";
 import NotificationsPage from "@/pages/notifications";
+import PersonalInfoPage from "@/pages/personal-info";
+import WalletPage from "@/pages/wallet";
+import AddressPage from "@/pages/address";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -38,6 +41,9 @@ function Router() {
       <Route path="/carpool/:id" component={() => <ProtectedRoute component={CarpoolDetailPage} />} />
       <Route path="/publish" component={() => <ProtectedRoute component={PublishPage} />} />
       <Route path="/profile" component={() => <ProtectedRoute component={ProfilePage} />} />
+      <Route path="/profile/edit" component={() => <ProtectedRoute component={PersonalInfoPage} />} />
+      <Route path="/wallet" component={() => <ProtectedRoute component={WalletPage} />} />
+      <Route path="/profile/address" component={() => <ProtectedRoute component={AddressPage} />} />
       <Route path="/chat" component={() => <ProtectedRoute component={ChatPage} />} />
       <Route path="/my-rides" component={() => <ProtectedRoute component={MyRidesPage} />} />
       <Route path="/notifications" component={() => <ProtectedRoute component={NotificationsPage} />} />

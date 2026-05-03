@@ -1,6 +1,14 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+export type Address = {
+  id: string;
+  title: string;
+  address: string;
+  city: string;
+  phone: string;
+};
+
 export type User = {
   id: string;
   name: string;
@@ -9,6 +17,8 @@ export type User = {
   gender: string;
   city: string;
   state: string;
+  dob: string;
+  sos: string;
   avatar: string | null;
   rating: number;
   totalRides: number;
@@ -16,6 +26,7 @@ export type User = {
   wallet: number;
   role: "driver" | "passenger";
   isDriver: boolean;
+  addresses: Address[];
 };
 
 export type Ride = {
@@ -64,11 +75,15 @@ type AppState = {
   updateUser: (data: Partial<User>) => void;
   addRide: (ride: Ride) => void;
   joinRide: (rideId: string) => void;
+  depositWallet: (amount: number) => void;
+  withdrawWallet: (amount: number) => void;
+  addAddress: (addr: Address) => void;
+  removeAddress: (id: string) => void;
 };
 
 const initialUsers: User[] = [
-  { id: "u1", name: "Ahmed Khan", phone: "+923001234567", email: "ahmed@example.com", gender: "Male", city: "Karachi", state: "Sindh", avatar: null, rating: 4.8, totalRides: 47, totalPosts: 12, wallet: 2500, role: "driver", isDriver: true },
-  { id: "u2", name: "Sara Malik", phone: "+923211112222", email: "sara@example.com", gender: "Female", city: "Lahore", state: "Punjab", avatar: null, rating: 4.5, totalRides: 23, totalPosts: 5, wallet: 1200, role: "passenger", isDriver: false }
+  { id: "u1", name: "Ahmed Khan", phone: "+923001234567", email: "ahmed@example.com", gender: "Male", city: "Karachi", state: "Sindh", dob: "1995-03-20", sos: "", avatar: null, rating: 4.8, totalRides: 47, totalPosts: 12, wallet: 2500, role: "driver", isDriver: true, addresses: [{ id: "a1", title: "Pickup", address: "DHA Phase 5, Karachi", city: "Karachi", phone: "+923001234567" }] },
+  { id: "u2", name: "Sara Malik", phone: "+923211112222", email: "sara@example.com", gender: "Female", city: "Lahore", state: "Punjab", dob: "1998-07-14", sos: "", avatar: null, rating: 4.5, totalRides: 23, totalPosts: 5, wallet: 1200, role: "passenger", isDriver: false, addresses: [] }
 ];
 
 const initialRides: Ride[] = [
@@ -96,51 +111,63 @@ export const useStore = create<AppState>()(
       rides: initialRides,
       conversations: initialConversations,
       messages: initialMessages,
+
       login: (phone) => set((state) => {
         const user = state.users.find(u => u.phone === phone);
         if (user) return { currentUser: user };
-        // Create a basic new user
         const newUser: User = {
-          id: `u${Date.now()}`,
-          name: "",
-          phone,
-          email: "",
-          gender: "",
-          city: "",
-          state: "",
-          avatar: null,
-          rating: 5.0,
-          totalRides: 0,
-          totalPosts: 0,
-          wallet: 0,
-          role: "passenger",
-          isDriver: false,
+          id: `u${Date.now()}`, name: "", phone, email: "", gender: "", city: "", state: "",
+          dob: "", sos: "", avatar: null, rating: 5.0, totalRides: 0, totalPosts: 0,
+          wallet: 0, role: "passenger", isDriver: false, addresses: [],
         };
         return { currentUser: newUser, users: [...state.users, newUser] };
       }),
+
       logout: () => set({ currentUser: null }),
+
       updateUser: (data) => set((state) => {
         if (!state.currentUser) return state;
         const updatedUser = { ...state.currentUser, ...data };
-        return {
-          currentUser: updatedUser,
-          users: state.users.map(u => u.id === updatedUser.id ? updatedUser : u)
-        };
+        return { currentUser: updatedUser, users: state.users.map(u => u.id === updatedUser.id ? updatedUser : u) };
       }),
+
       addRide: (ride) => set((state) => ({ rides: [...state.rides, ride] })),
+
       joinRide: (rideId) => set((state) => {
         if (!state.currentUser) return state;
         return {
-          rides: state.rides.map(r => 
+          rides: state.rides.map(r =>
             r.id === rideId && !r.passengers.includes(state.currentUser!.id)
               ? { ...r, passengers: [...r.passengers, state.currentUser!.id], availableSeats: Math.max(0, r.availableSeats - 1) }
               : r
           )
         };
       }),
+
+      depositWallet: (amount) => set((state) => {
+        if (!state.currentUser) return state;
+        const updated = { ...state.currentUser, wallet: state.currentUser.wallet + amount };
+        return { currentUser: updated, users: state.users.map(u => u.id === updated.id ? updated : u) };
+      }),
+
+      withdrawWallet: (amount) => set((state) => {
+        if (!state.currentUser) return state;
+        const updated = { ...state.currentUser, wallet: Math.max(0, state.currentUser.wallet - amount) };
+        return { currentUser: updated, users: state.users.map(u => u.id === updated.id ? updated : u) };
+      }),
+
+      addAddress: (addr) => set((state) => {
+        if (!state.currentUser) return state;
+        const updated = { ...state.currentUser, addresses: [...state.currentUser.addresses, addr] };
+        return { currentUser: updated, users: state.users.map(u => u.id === updated.id ? updated : u) };
+      }),
+
+      removeAddress: (id) => set((state) => {
+        if (!state.currentUser) return state;
+        const updated = { ...state.currentUser, addresses: state.currentUser.addresses.filter(a => a.id !== id) };
+        return { currentUser: updated, users: state.users.map(u => u.id === updated.id ? updated : u) };
+      }),
     }),
-    {
-      name: "masride_store",
-    }
+    { name: "masride_store" }
   )
 );
