@@ -14,6 +14,7 @@ import PublishPage from "@/pages/publish";
 import ProfilePage from "@/pages/profile";
 import ChatPage from "@/pages/chat";
 import MyRidesPage from "@/pages/my-rides";
+import NotificationsPage from "@/pages/notifications";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -39,6 +40,7 @@ function Router() {
       <Route path="/profile" component={() => <ProtectedRoute component={ProfilePage} />} />
       <Route path="/chat" component={() => <ProtectedRoute component={ChatPage} />} />
       <Route path="/my-rides" component={() => <ProtectedRoute component={MyRidesPage} />} />
+      <Route path="/notifications" component={() => <ProtectedRoute component={NotificationsPage} />} />
       <Route component={NotFound} />
     </Switch>
   );
