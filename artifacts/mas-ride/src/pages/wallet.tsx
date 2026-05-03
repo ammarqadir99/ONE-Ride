@@ -27,12 +27,72 @@ export default function WalletPage() {
   const [mobile, setMobile] = useState("");
   const [processing, setProcessing] = useState(false);
   const [invoiceAmount, setInvoiceAmount] = useState(0);
+  const [payProId, setPayProId] = useState("");
 
   const balance = currentUser?.wallet ?? 0;
 
   const today = new Date();
   const tomorrow = new Date(today); tomorrow.setDate(today.getDate() + 1);
   const fmt = (d: Date) => d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" }).replace(/ /g, "-");
+
+  /* --- Download Invoice --- */
+  const handleDownloadInvoice = () => {
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ONE Ride Invoice</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 40px 20px; color: #111; }
+    .card { background: #fff; max-width: 520px; margin: 0 auto; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.10); }
+    .header { background: #7C3AED; padding: 32px 32px 24px; color: #fff; }
+    .header h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; }
+    .header p { font-size: 13px; margin-top: 4px; opacity: 0.75; }
+    .body { padding: 28px 32px; }
+    .row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+    .row:last-child { border-bottom: none; }
+    .label { color: #888; }
+    .value { font-weight: 600; }
+    .status-unpaid { color: #d97706; font-weight: 700; }
+    .section-title { font-size: 15px; font-weight: 700; margin: 24px 0 10px; }
+    .total-row { display: flex; justify-content: space-between; font-size: 16px; font-weight: 800; padding: 14px 0 0; border-top: 2px solid #7C3AED; margin-top: 8px; color: #7C3AED; }
+    .footer { text-align: center; padding: 18px; font-size: 12px; color: #aaa; border-top: 1px solid #f0f0f0; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <h1>ONE Ride</h1>
+      <p>Wallet Deposit Invoice</p>
+    </div>
+    <div class="body">
+      <div class="row"><span class="label">Billed To</span><span class="value">${currentUser?.name || "User"}</span></div>
+      <div class="row"><span class="label">PayPro ID</span><span class="value">${payProId}</span></div>
+      <div class="row"><span class="label">Invoice Status</span><span class="value status-unpaid">UNPAID</span></div>
+      <div class="row"><span class="label">Issue Date</span><span class="value">${fmt(today)}</span></div>
+      <div class="row"><span class="label">Due Date</span><span class="value">${fmt(tomorrow)}</span></div>
+
+      <div class="section-title">Summary</div>
+      <div class="row"><span class="label">Bill Amount</span><span class="value">PKR ${invoiceAmount}.00</span></div>
+      <div class="row"><span class="label">Service Fee</span><span class="value">PKR 0.00</span></div>
+      <div class="total-row"><span>Total Amount</span><span>PKR ${invoiceAmount}.00</span></div>
+    </div>
+    <div class="footer">ONE Ride &mdash; Generated on ${fmt(today)} &mdash; Thank you for your payment</div>
+  </div>
+</body>
+</html>`;
+
+    const blob = new Blob([html], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `oneride-invoice-${payProId}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
 
   /* --- Deposit flow --- */
   const handleDeposit = () => {
@@ -41,6 +101,7 @@ export default function WalletPage() {
     if (val < 50) { setAmountError("Minimum deposit is 50"); return; }
     setAmountError("");
     setInvoiceAmount(val);
+    setPayProId(`2629261${Date.now().toString().slice(-7)}`);
     setView("invoice");
   };
 
@@ -75,7 +136,6 @@ export default function WalletPage() {
   /* ====== VIEWS ====== */
 
   if (view === "invoice") {
-    const payProId = `2629261${Date.now().toString().slice(-7)}`;
     return (
       <PhoneFrame>
         <div className="flex flex-col h-full bg-gray-50">
@@ -105,7 +165,11 @@ export default function WalletPage() {
             <div className="bg-white rounded-2xl border border-border shadow-sm p-4">
               <div className="flex items-center justify-between mb-3">
                 <h3 className="font-bold text-foreground">Summary</h3>
-                <button className="flex items-center gap-1 text-xs text-muted-foreground">
+                <button
+                  onClick={handleDownloadInvoice}
+                  className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
+                  data-testid="button-download-invoice"
+                >
                   <Download className="w-3.5 h-3.5" /> Download Invoice
                 </button>
               </div>
