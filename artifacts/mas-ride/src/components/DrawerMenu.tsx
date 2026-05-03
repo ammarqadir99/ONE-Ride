@@ -3,7 +3,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Info, User, Wallet, HeadphonesIcon, Search, CarFront, PlusCircle, CreditCard, Share2, Bell, Settings, LogOut } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
-export function DrawerMenu() {
+interface DrawerMenuProps {
+  onClose?: () => void;
+}
+
+export function DrawerMenu({ onClose }: DrawerMenuProps) {
   const currentUser = useStore((state) => state.currentUser);
   const logout = useStore((state) => state.logout);
   const [, setLocation] = useLocation();
@@ -24,6 +28,7 @@ export function DrawerMenu() {
 
   const handleLogout = () => {
     logout();
+    onClose?.();
     setLocation("/login");
   };
 
@@ -36,8 +41,8 @@ export function DrawerMenu() {
             {currentUser?.name?.substring(0, 2).toUpperCase() || "U"}
           </AvatarFallback>
         </Avatar>
-        <h2 className="text-xl font-bold">{currentUser?.name || "User"}</h2>
-        <p className="text-primary-foreground/80 text-sm mt-1">{currentUser?.phone}</p>
+        <h2 className="text-xl font-bold text-white">{currentUser?.name || "User"}</h2>
+        <p className="text-white/70 text-sm mt-1">{currentUser?.phone}</p>
       </div>
 
       <div className="flex flex-col gap-1 flex-1">
@@ -45,23 +50,24 @@ export function DrawerMenu() {
           <Link
             key={item.label}
             href={item.href}
-            className="flex items-center gap-4 py-3 text-primary-foreground/90 hover:text-white transition-colors"
+            onClick={onClose}
+            className="flex items-center gap-4 py-3 text-white/90 hover:text-white transition-colors"
           >
             <item.icon className="w-5 h-5 opacity-80" />
             <span className="font-medium text-sm">{item.label}</span>
           </Link>
         ))}
-        
+
         <button
           onClick={handleLogout}
-          className="flex items-center gap-4 py-3 mt-4 text-primary-foreground hover:text-white transition-colors w-full text-left"
+          className="flex items-center gap-4 py-3 mt-4 text-white/90 hover:text-white transition-colors w-full text-left"
         >
           <LogOut className="w-5 h-5 opacity-80" />
           <span className="font-medium text-sm">Logout</span>
         </button>
       </div>
 
-      <div className="mt-8 text-center text-primary-foreground/60 text-xs">
+      <div className="mt-8 text-center text-white/50 text-xs">
         App Version 1.0.0
       </div>
     </div>

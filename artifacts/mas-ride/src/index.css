@@ -311,6 +311,15 @@
     inset: -1px;
   }
 
+  /* Slide-in animation for drawer */
+  @keyframes slide-in-left {
+    from { transform: translateX(-100%); }
+    to   { transform: translateX(0); }
+  }
+  .animate-slide-in-left {
+    animation: slide-in-left 0.22s ease-out forwards;
+  }
+
   /* Hide scrollbars while preserving scroll functionality */
   .no-scrollbar {
     -ms-overflow-style: none;
