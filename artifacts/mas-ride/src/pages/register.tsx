@@ -9,6 +9,7 @@ import { PhoneFrame } from "@/components/PhoneFrame";
 import { Link } from "wouter";
 import { ChevronLeft } from "lucide-react";
 import { useStore } from "@/store";
+import { useToast } from "@/hooks/use-toast";
 
 const schema = z.object({
   phone: z.string().min(10, "Enter a valid phone number"),
@@ -17,11 +18,23 @@ const schema = z.object({
 export default function RegisterPage() {
   const [, setLocation] = useLocation();
   const login = useStore((s) => s.login);
+  const users = useStore((s) => s.users);
+  const { toast } = useToast();
 
   const form = useForm({ resolver: zodResolver(schema), defaultValues: { phone: "" } });
 
   const onSubmit = (data: { phone: string }) => {
-    login("+92" + data.phone.replace(/\s/g, ""));
+    const fullPhone = "+92" + data.phone.replace(/\s/g, "");
+    const exists = users.some((u) => u.phone === fullPhone);
+    if (exists) {
+      toast({
+        title: "User already exists",
+        description: "An account with this number is already registered. Please sign in.",
+        variant: "destructive",
+      });
+      return;
+    }
+    login(fullPhone);
     setLocation("/verify-otp?mode=register");
   };
 
