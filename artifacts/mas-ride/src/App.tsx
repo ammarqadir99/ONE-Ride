@@ -18,6 +18,7 @@ import NotificationsPage from "@/pages/notifications";
 import PersonalInfoPage from "@/pages/personal-info";
 import WalletPage from "@/pages/wallet";
 import AddressPage from "@/pages/address";
+import MyRatingPage from "@/pages/my-rating";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -44,6 +45,7 @@ function Router() {
       <Route path="/profile/edit" component={() => <ProtectedRoute component={PersonalInfoPage} />} />
       <Route path="/wallet" component={() => <ProtectedRoute component={WalletPage} />} />
       <Route path="/profile/address" component={() => <ProtectedRoute component={AddressPage} />} />
+      <Route path="/profile/rating" component={() => <ProtectedRoute component={MyRatingPage} />} />
       <Route path="/chat" component={() => <ProtectedRoute component={ChatPage} />} />
       <Route path="/my-rides" component={() => <ProtectedRoute component={MyRidesPage} />} />
       <Route path="/notifications" component={() => <ProtectedRoute component={NotificationsPage} />} />
