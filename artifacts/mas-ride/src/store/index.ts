@@ -114,7 +114,7 @@ export const useStore = create<AppState>()(
 
       login: (phone) => set((state) => {
         const user = state.users.find(u => u.phone === phone);
-        if (user) return { currentUser: user };
+        if (user) return { currentUser: { addresses: [], dob: "", sos: "", ...user } };
         const newUser: User = {
           id: `u${Date.now()}`, name: "", phone, email: "", gender: "", city: "", state: "",
           dob: "", sos: "", avatar: null, rating: 5.0, totalRides: 0, totalPosts: 0,
@@ -158,13 +158,15 @@ export const useStore = create<AppState>()(
 
       addAddress: (addr) => set((state) => {
         if (!state.currentUser) return state;
-        const updated = { ...state.currentUser, addresses: [...state.currentUser.addresses, addr] };
+        const existing = state.currentUser.addresses ?? [];
+        const updated = { ...state.currentUser, addresses: [...existing, addr] };
         return { currentUser: updated, users: state.users.map(u => u.id === updated.id ? updated : u) };
       }),
 
       removeAddress: (id) => set((state) => {
         if (!state.currentUser) return state;
-        const updated = { ...state.currentUser, addresses: state.currentUser.addresses.filter(a => a.id !== id) };
+        const existing = state.currentUser.addresses ?? [];
+        const updated = { ...state.currentUser, addresses: existing.filter(a => a.id !== id) };
         return { currentUser: updated, users: state.users.map(u => u.id === updated.id ? updated : u) };
       }),
     }),
