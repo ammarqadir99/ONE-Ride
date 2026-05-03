@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useLocation } from "wouter";
 import { PhoneFrame } from "@/components/PhoneFrame";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ export default function PersonalInfoPage() {
   const currentUser = useStore((s) => s.currentUser);
   const updateUser = useStore((s) => s.updateUser);
   const [editing, setEditing] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const nameParts = (currentUser?.name || "").split(" ");
   const [form, setForm] = useState({
@@ -40,7 +41,24 @@ export default function PersonalInfoPage() {
     setEditing(false);
   };
 
+  const handleAvatarClick = () => {
+    if (editing) fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const dataUrl = ev.target?.result as string;
+      if (dataUrl) updateUser({ avatar: dataUrl });
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
+
   const initials = (currentUser?.name || "U").substring(0, 2).toUpperCase();
+  const avatar = currentUser?.avatar;
 
   return (
     <PhoneFrame>
@@ -56,19 +74,41 @@ export default function PersonalInfoPage() {
           {/* Avatar */}
           <div className="flex justify-center mb-8">
             <div className="relative">
-              <div className="w-24 h-24 rounded-full border-[3px] border-primary flex items-center justify-center bg-accent text-primary text-3xl font-bold">
-                {initials}
-              </div>
+              <button
+                onClick={handleAvatarClick}
+                className={cn("w-24 h-24 rounded-full border-[3px] border-primary overflow-hidden flex items-center justify-center bg-accent", editing && "cursor-pointer")}
+                disabled={!editing}
+                aria-label="Change profile photo"
+              >
+                {avatar ? (
+                  <img src={avatar} alt="Profile" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-primary text-3xl font-bold">{initials}</span>
+                )}
+              </button>
+
               {editing && (
-                <button className="absolute bottom-0 right-0 w-8 h-8 bg-primary rounded-full flex items-center justify-center shadow-md">
+                <button
+                  onClick={handleAvatarClick}
+                  className="absolute bottom-0 right-0 w-8 h-8 bg-primary rounded-full flex items-center justify-center shadow-md"
+                  aria-label="Upload photo"
+                >
                   <Camera className="w-4 h-4 text-white" />
                 </button>
               )}
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleFileChange}
+                data-testid="input-avatar"
+              />
             </div>
           </div>
 
           {!editing ? (
-            /* View mode */
             <div className="bg-white rounded-2xl shadow-sm border border-border overflow-hidden mb-6">
               {[
                 { label: "Name", value: currentUser?.name || "—" },
@@ -88,7 +128,6 @@ export default function PersonalInfoPage() {
               ))}
             </div>
           ) : (
-            /* Edit mode */
             <div className="space-y-3 mb-6">
               <div>
                 <Input

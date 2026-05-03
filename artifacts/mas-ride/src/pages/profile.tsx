@@ -1,7 +1,7 @@
 import { useLocation } from "wouter";
 import { PhoneFrame } from "@/components/PhoneFrame";
 import { BottomNav } from "@/components/BottomNav";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Star, User, Wallet, MapPin, ChevronRight, Trash2, ThumbsUp, LogOut } from "lucide-react";
 import { useStore } from "@/store";
 
@@ -31,6 +31,7 @@ export default function ProfilePage() {
           <h1 className="text-white font-bold text-xl mb-6">My Profile</h1>
           <div className="flex flex-col items-center">
             <Avatar className="w-20 h-20 border-4 border-white shadow-lg mb-3">
+              {currentUser?.avatar && <AvatarImage src={currentUser.avatar} alt="Profile" className="object-cover" />}
               <AvatarFallback className="bg-white text-primary text-2xl font-bold">
                 {currentUser?.name?.substring(0, 2).toUpperCase() || "U"}
               </AvatarFallback>
