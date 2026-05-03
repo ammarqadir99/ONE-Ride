@@ -51,7 +51,7 @@ export default function HomePage() {
                   activeTab === tab ? "text-primary border-b-2 border-primary" : "text-muted-foreground"
                 )}
               >
-                MAS {tab === "ride" ? "Ride" : "Carpool"}
+                {tab === "ride" ? "Ride" : "Carpool"}
               </button>
             ))}
           </div>
